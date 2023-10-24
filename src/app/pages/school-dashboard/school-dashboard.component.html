@@ -1,0 +1,27 @@
+<div class="header-dashboard">
+  <div class="card col-12">
+    <div class="card-body">
+      <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th><span class="content-up">School Name</span> <br/> <span class="content-down">Address</span></th>
+                <th>City</th>
+                <th>Grade Range</th>
+                <th>Phone</th>
+                <th>School Details</th>
+                <th>Travel Distance</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of dataSource">
+                <td><span class="content-up">{{data.schoolName}}</span> <br /> <span class="content-down">{{data.address}}</span></td>
+                <td>{{data.city}}</td>
+                <td>{{data.gradeRange}}</td>
+                <td>{{data.phone}}</td>
+                <td class="content-down">{{data.schoolTypeDesc}} <br/> {{data.schoolCategoryDesc}}</td>
+                <td>{{data.travelDistance}} Km</td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+</div>

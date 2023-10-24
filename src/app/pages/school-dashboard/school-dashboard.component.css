@@ -1,0 +1,35 @@
+.header-dashboard {
+    display: flex;
+    gap: 3rem;
+}
+
+td, th {
+    vertical-align: middle;
+    font-size: 0.9rem;
+}
+
+.table thead tr th{ 
+    color: white;
+    background-color:#103b9b;
+}
+
+.table thead tr th .content-down{
+    color: #b8b8b8 !important;
+}
+
+.table tbody tr.active td {
+    background: #ed1f346b;    
+}
+
+.table tbody tr.active {
+    border: 2px solid black; 
+}
+
+.content-up{
+    font-size: 1rem;
+}
+
+.content-down{
+    font-size: 0.8rem;
+    color: #616161;
+}

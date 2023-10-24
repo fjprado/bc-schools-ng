@@ -1,16 +1,18 @@
 .header-container {
     display: flex;
-    gap: 3rem;
+    gap: 1em;
+    justify-content: space-between;
+    height: 15vh;
 }
-.logo {
-    border: 2px rgba(252, 94, 94, 0.500) solid;
-    border-radius: 5px;
-    box-shadow: 4px 4px 4px rgb(71, 71, 71);
-    margin-inline: 1rem;
-}
+
 .logo-text{
     font-size: 1.2rem;
     font-weight: 500;
     text-align: center;
-    color: #0b5ed7;    
+    color: #103b9b;    
+}
+
+.btn-primary{
+    color: white;
+    background-color: #103b9b;
 }
