@@ -6,17 +6,30 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { LayoutComponent } from './layout/layout.component';
-import { HeaderComponent } from './layout/header/header.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { HeaderComponent } from './layout/components/header/header.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DropdownComponent } from './layout/components/dropdown/dropdown.component';
+import { SchoolDashboardComponent } from './pages/school-dashboard/school-dashboard.component';
+import { TableFilterComponent } from './layout/components/table-filter/table-filter.component';
+import { TableContentComponent } from './layout/components/table-content/table-content.component';
 
 @NgModule({
-  declarations: [AppComponent, LayoutComponent, HeaderComponent],
+  declarations: [
+    AppComponent,
+    LayoutComponent,
+    HeaderComponent,
+    DropdownComponent,
+    SchoolDashboardComponent,
+    TableContentComponent,
+    TableFilterComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,4 +1,4 @@
-.container {    
-    width: 100vw; 
-    height: 100vh;
+.layout-container {    
+    max-width: 90vw; 
+    max-height: 90vh;
 }
