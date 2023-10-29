@@ -1,27 +1,18 @@
-import { CommonModule } from '@angular/common';
 import { Component, ViewEncapsulation } from '@angular/core';
-
-export interface ISchoolData {
-  schoolCode: string;
-  schoolName: string;
-  address: string;
-  city: string;
-  gradeRange: string;
-  phone: string;
-  schoolTypeDesc: string;
-  schoolCategoryDesc: string;
-  travelDistance: number;
-}
+import { ISchoolData } from 'src/app/layout/components/table-content/table-content.component';
 
 const ELEMENT_DATA: ISchoolData[] = [
   {
     schoolCode: '00111',
     schoolName: 'schoolName Test',
     address: 'address Test',
+    cityId: 1,
     city: 'city test',
     gradeRange: '+7, +11',
     phone: '1 2326561554',
+    schoolTypeId: 1,
     schoolTypeDesc: 'type test',
+    schoolCategoryId: 1,
     schoolCategoryDesc: 'category test',
     travelDistance: 1.1,
   },
@@ -29,10 +20,13 @@ const ELEMENT_DATA: ISchoolData[] = [
     schoolCode: '00111',
     schoolName: 'schoolName Test',
     address: 'address Test',
+    cityId: 1,
     city: 'city test',
     gradeRange: '+7, +11',
     phone: '1 2326561554',
+    schoolTypeId: 1,
     schoolTypeDesc: 'type test',
+    schoolCategoryId: 1,
     schoolCategoryDesc: 'category test',
     travelDistance: 1.1,
   },
@@ -40,10 +34,13 @@ const ELEMENT_DATA: ISchoolData[] = [
     schoolCode: '00111',
     schoolName: 'schoolName Test',
     address: 'address Test',
+    cityId: 1,
     city: 'city test',
     gradeRange: '+7, +11',
     phone: '1 2326561554',
+    schoolTypeId: 1,
     schoolTypeDesc: 'type test',
+    schoolCategoryId: 1,
     schoolCategoryDesc: 'category test',
     travelDistance: 1.1,
   },
@@ -54,8 +51,6 @@ const ELEMENT_DATA: ISchoolData[] = [
   templateUrl: './school-dashboard.component.html',
   styleUrls: ['school-dashboard.component.css'],
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
-  imports: [CommonModule],
 })
 export class SchoolDashboardComponent {
   displayedColumns: string[] = ['profile', 'hrate', 'exclasses', 'status'];

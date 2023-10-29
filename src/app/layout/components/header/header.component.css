@@ -2,7 +2,12 @@
     display: flex;
     gap: 1em;
     justify-content: space-between;
-    height: 15vh;
+}
+
+.presentation-box {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #103b9b;   
 }
 
 .logo-text{

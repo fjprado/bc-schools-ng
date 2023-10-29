@@ -1,0 +1,38 @@
+<div class="card col">
+  <div class="card-body align-items-center d-flex justify-content-around">
+    <app-dropdown
+      class="p-0"
+      [dropdownName]="'City'"
+      [items]="cities"
+    ></app-dropdown>
+    <app-dropdown
+      class="p-0"
+      [dropdownName]="'School Type'"
+      [items]="schoolTypes"
+    ></app-dropdown>
+    <app-dropdown
+      class="p-0"
+      [dropdownName]="'School Category'"
+      [items]="schoolCategories"
+    ></app-dropdown>
+    <div class="distance-range d-flex align-items-center">
+      <label for="distanceRange" class="form-label px-2 w-50 mb-0"
+        >Distance Range</label
+      >
+      <input
+        type="range"
+        class="form-range"
+        min="1"
+        max="100"
+        step="1"
+        id="distanceRange"
+        [(ngModel)]="range"
+      />
+      <label for="distanceRange" class="form-label px-2 w-25 mb-0">
+        {{ range }} Km</label
+      >
+    </div>
+    <button *ngIf="!mapView" type="button" (click)="setMapView()" class="btn btn-primary" style="width: 11%;">See map view</button>
+    <button *ngIf="mapView" type="button" (click)="setMapView()" class="btn btn-warning" style="width: 11%;">See list view</button>
+  </div>
+</div>
