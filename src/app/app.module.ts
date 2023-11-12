@@ -12,6 +12,8 @@ import { DropdownComponent } from './layout/components/dropdown/dropdown.compone
 import { SchoolDashboardComponent } from './pages/school-dashboard/school-dashboard.component';
 import { TableFilterComponent } from './layout/components/table-filter/table-filter.component';
 import { TableContentComponent } from './layout/components/table-content/table-content.component';
+import { GoogleMapsModule } from '@angular/google-maps';
+import { SchoolMapComponent } from './layout/components/school-map/school-map.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { TableContentComponent } from './layout/components/table-content/table-c
     SchoolDashboardComponent,
     TableContentComponent,
     TableFilterComponent,
+    SchoolMapComponent,
   ],
   imports: [
     BrowserModule,
@@ -30,6 +33,7 @@ import { TableContentComponent } from './layout/components/table-content/table-c
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
+    GoogleMapsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

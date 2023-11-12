@@ -1,0 +1,16 @@
+.loading-container {
+  height: 13rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.loading-box {
+  display: flex;
+  width: max-content;
+  flex-direction: column;
+}
+
+.loading-text {
+  color: #103b9b;
+}

@@ -1,8 +1,16 @@
-<div class="row pb-3">   
-    <app-table-filter class="p-0" [cities]="items" [schoolCategories]="items" [schoolTypes]="items" [range]="range"></app-table-filter> 
+<div class="row pb-3">
+  <app-table-filter
+    class="p-0"
+    [cities]="cityList"
+    [schoolCategories]="schoolCategoryList"
+    [schoolTypes]="schoolTypeList"
+    [range]="range"
+    (onChangeView)="onChangeView()"
+  >
+  </app-table-filter>
 </div>
-<div class="row">
-  <div class="card col-12">
+<div class="row gap-3">
+  <div class="card col">
     <div class="card-body">
       <table class="table table-bordered">
         <thead>
@@ -11,30 +19,76 @@
               <span class="content-up">School Name</span> <br />
               <span class="content-down">Address</span>
             </th>
-            <th>City</th>
-            <th>Grade Range</th>
-            <th>Phone</th>
-            <th>School Details</th>
+            <th *ngIf="!mapView">City</th>
+            <th *ngIf="!mapView">Grade Range</th>
+            <th *ngIf="!mapView">Contact</th>
+            <th *ngIf="mapView">More Info</th>
+            <th *ngIf="!mapView">School Details</th>
             <th>Travel Distance</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of dataSource">
+          <tr
+            *ngFor="let data of visibleData"
+            (click)="setViewSchool(data)"
+            [ngClass]="
+              this.rowSelected?.code === data.code ? 'selected-row' : ''
+            "
+          >
             <td>
-              <span class="content-up">{{ data.schoolName }}</span> <br />
+              <span class="content-up">{{ data.name }}</span> <br />
               <span class="content-down">{{ data.address }}</span>
             </td>
-            <td>{{ data.city }}</td>
-            <td>{{ data.gradeRange }}</td>
-            <td>{{ data.phone }}</td>
-            <td class="reduced-content">
+            <td *ngIf="!mapView">{{ data.city }}</td>
+            <td *ngIf="!mapView">{{ data.gradeRange }}</td>
+            <td class="reduced-content" *ngIf="!mapView">
+              <b>Phone:</b> {{ data.phone }} <br />
+              <b>Fax:</b> {{ data.fax }}
+            </td>
+            <td class="reduced-content" *ngIf="mapView">
+              <b>City:</b> {{ data.city }} <br />
+              <b>Phone:</b> {{ data.phone }} <br />
+              <b>Fax:</b> {{ data.fax }}
+            </td>
+            <td class="reduced-content" *ngIf="!mapView">
               {{ data.schoolTypeDesc }} <br />
               {{ data.schoolCategoryDesc }}
             </td>
-            <td>{{ data.travelDistance }} Km</td>
+            <td style="width: 17%">{{ data.travelDistance }} Km</td>
           </tr>
         </tbody>
       </table>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li
+            class="page-item"
+            (click)="currentPage = currentPage - 1"
+            [class.disabled]="currentPage === 1"
+          >
+            <a class="page-link">Previous</a>
+          </li>
+          <li
+            class="page-item"
+            *ngFor="let page of getPages()"
+            [class.active]="currentPage === page"
+          >
+            <a class="page-link" (click)="currentPage = page">{{ page }}</a>
+          </li>
+          <li
+            class="page-item"
+            (click)="currentPage = currentPage + 1"
+            [class.disabled]="currentPage === totalPages()"
+          >
+            <a class="page-link">Next</a>
+          </li>
+        </ul>
+      </nav>
     </div>
+  </div>
+  <div *ngIf="mapView" class="card col-7">
+    <app-school-map
+      [schoolList]="visibleData"
+      [schoolSelected]="schoolSelected"
+    ></app-school-map>
   </div>
 </div>
