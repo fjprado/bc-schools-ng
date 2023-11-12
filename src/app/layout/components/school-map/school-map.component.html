@@ -11,7 +11,7 @@
   </div>
   <google-map
     *ngIf="!loading"
-    height="500px"
+    height="600px"
     width="100%"
     [zoom]="zoom"
     [center]="center"
@@ -27,8 +27,32 @@
       (mapClick)="openInfo(marker, item.info)"
     >
     </map-marker>
-    <map-info-window style="margin-bottom: 2rem; white-space: pre-wrap">{{
-      infoContent
-    }}</map-info-window>
+    <map-info-window class="map-info-container" [options]="infoWindowOptions">
+      <div class="map-school-selected-title">
+        {{ this.schoolMapSelected?.name }}
+      </div>
+      <div class="map-school-selected-text">
+        <b>Address:</b> {{ this.schoolMapSelected?.address }}
+      </div>
+      <div class="map-school-selected-text">
+        <b>Phone:</b> {{ this.schoolMapSelected?.address }}
+      </div>
+      <div class="map-school-selected-text pt-1">
+        <a
+          href="https://www.google.com/maps/search/{{
+            this.schoolMapSelected?.name
+          }}"
+          target="_blank"
+          >See in Google Maps</a
+        >
+      </div>
+    </map-info-window>
+
+    <ng-container *ngIf="directionsResults$ | async as directionsResults">
+      <map-directions-renderer
+        [directions]="directionsResults"
+        [options]="mapDirectionOptions"
+      ></map-directions-renderer>
+    </ng-container>
   </google-map>
 </div>

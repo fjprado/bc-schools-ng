@@ -10,19 +10,21 @@ import { Subject } from 'rxjs';
 })
 export class TableContentComponent implements OnInit {
   @Input() dataSource: ISchoolData[] = [];
+  tableDataSource: ISchoolData[] = [];
   items: IDropdownItem[] = [];
   cityList: IDropdownItem[] = [];
   schoolTypeList: IDropdownItem[] = [];
   schoolCategoryList: IDropdownItem[] = [];
-  range: number = 1;
-  mapView: boolean = true;
-  itemsPerPage: number = 3; // Number of items to display per page
+  range: number = 60;
+  mapView: boolean = false;
+  itemsPerPage: number = 10; // Number of items to display per page
   currentPage: number = 1; // Current page
-  visibleMapData: ISchoolData[] = [];
   schoolSelected: Subject<ISchoolData> = new Subject();
   rowSelected: ISchoolData | null = null;
+  schoolsFiltered: Subject<ISchoolData[]> = new Subject();
 
   ngOnInit(): void {
+    this.tableDataSource = this.dataSource;
     // get values for dropdowns
     const mapCity = new Map(
       this.dataSource
@@ -67,7 +69,7 @@ export class TableContentComponent implements OnInit {
   get visibleData(): any[] {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
-    return this.dataSource.slice(startIndex, endIndex);
+    return this.tableDataSource.slice(startIndex, endIndex);
   }
 
   setViewSchool(item: ISchoolData) {
@@ -83,10 +85,31 @@ export class TableContentComponent implements OnInit {
   }
 
   totalPages(): number {
-    return Math.ceil(this.dataSource.length / this.itemsPerPage);
+    return Math.ceil(this.tableDataSource.length / this.itemsPerPage);
   }
 
   onChangeView() {
     this.mapView = !this.mapView;
+  }
+
+  onFilterSchools(range: number) {
+    this.currentPage = 1;
+    let cities = this.cityList.filter((x) => x.selected).map((x) => x.value);
+    let schoolCategoryIds = this.schoolCategoryList
+      .filter((x) => x.selected)
+      .map((x) => x.id);
+    let schoolTypeIds = this.schoolTypeList
+      .filter((x) => x.selected)
+      .map((x) => x.id);
+    this.tableDataSource = this.dataSource.filter(
+      (x) =>
+        (cities.length == 0 || cities.includes(x.city)) &&
+        (schoolCategoryIds.length == 0 ||
+          schoolCategoryIds.includes(x.schoolCategoryId)) &&
+        (schoolTypeIds.length == 0 || schoolTypeIds.includes(x.schoolTypeId)) &&
+        x.travelDistance <= range
+    );
+
+    this.schoolsFiltered.next(this.visibleData);
   }
 }

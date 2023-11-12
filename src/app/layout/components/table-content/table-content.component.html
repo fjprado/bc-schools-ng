@@ -6,6 +6,7 @@
     [schoolTypes]="schoolTypeList"
     [range]="range"
     (onChangeView)="onChangeView()"
+    (onFilterSchools)="onFilterSchools($event)"
   >
   </app-table-filter>
 </div>
@@ -62,7 +63,9 @@
         <ul class="pagination justify-content-center">
           <li
             class="page-item"
-            (click)="currentPage = currentPage - 1"
+            (click)="
+              currentPage = currentPage !== 1 ? currentPage - 1 : currentPage
+            "
             [class.disabled]="currentPage === 1"
           >
             <a class="page-link">Previous</a>
@@ -76,7 +79,10 @@
           </li>
           <li
             class="page-item"
-            (click)="currentPage = currentPage + 1"
+            (click)="
+              currentPage =
+                currentPage !== totalPages() ? currentPage + 1 : currentPage
+            "
             [class.disabled]="currentPage === totalPages()"
           >
             <a class="page-link">Next</a>
@@ -85,10 +91,11 @@
       </nav>
     </div>
   </div>
-  <div *ngIf="mapView" class="card col-7">
+  <div *ngIf="mapView" class="card col-7 d-flex justify-content-center">
     <app-school-map
       [schoolList]="visibleData"
       [schoolSelected]="schoolSelected"
+      [schoolsFiltered]="schoolsFiltered"
     ></app-school-map>
   </div>
 </div>
