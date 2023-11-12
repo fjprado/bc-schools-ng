@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 export interface IDropdownItem {
-  id: number;
+  id: number | string;
   value: string;
   selected: boolean;
 }
