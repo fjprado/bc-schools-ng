@@ -13,9 +13,22 @@ export class TableFilterComponent {
   @Input() range!: number;
   mapView: boolean = false;
   @Output() onChangeView: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onFilterSchools: EventEmitter<any> = new EventEmitter<any>();
 
   setMapView(): void {
     this.mapView = !this.mapView;
     this.onChangeView.emit();
+  }
+
+  filterSchools() {
+    this.onFilterSchools.emit(this.range);
+  }
+
+  resetFilters() {
+    this.cities.forEach((x) => (x.selected = false));
+    this.schoolTypes.forEach((x) => (x.selected = false));
+    this.schoolCategories.forEach((x) => (x.selected = false));
+    this.range = 60;
+    this.onFilterSchools.emit(this.range);
   }
 }

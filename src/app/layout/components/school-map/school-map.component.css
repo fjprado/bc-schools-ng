@@ -2,7 +2,7 @@
   height: 13rem;
   display: flex;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .loading-box {
@@ -13,4 +13,21 @@
 
 .loading-text {
   color: #103b9b;
+}
+
+.map-info-container {
+  margin-bottom: 2rem;
+  white-space: pre-wrap;
+  text-align: center;
+}
+
+.map-school-selected-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-family: "Plus Jakarta Sans";
+  padding-bottom: 5px;
+}
+
+.map-school-selected-text {
+  font-family: "Plus Jakarta Sans";
 }

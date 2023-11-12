@@ -1,6 +1,17 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
-import { Subject } from 'rxjs';
+import {
+  Component,
+  Input,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
+import {
+  GoogleMap,
+  MapDirectionsService,
+  MapInfoWindow,
+  MapMarker,
+} from '@angular/google-maps';
+import { Observable, Subject, map } from 'rxjs';
 import { ISchoolData } from 'src/app/models/school-data.model';
 
 @Component({
@@ -13,6 +24,9 @@ export class SchoolMapComponent implements OnInit {
   @ViewChild(GoogleMap, { static: false }) map!: GoogleMap;
   @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
   @Input() schoolSelected: Subject<any> = new Subject<any>();
+  @Input() schoolsFiltered: Subject<ISchoolData[]> = new Subject<
+    ISchoolData[]
+  >();
   loading: boolean = true;
   zoom = 13;
   center!: google.maps.LatLngLiteral;
@@ -22,9 +36,22 @@ export class SchoolMapComponent implements OnInit {
     minZoom: 9,
   };
   markers: any = [];
-  infoContent = '';
+  schoolMapSelected: ISchoolData | undefined;
 
-  constructor() {}
+  directionsResults$!: Observable<google.maps.DirectionsResult | undefined>;
+  infoWindowOptions!: google.maps.InfoWindowOptions;
+  mapDirectionOptions!: google.maps.DirectionsRendererOptions;
+
+  constructor(private mapDirectionsService: MapDirectionsService) {
+    this.mapDirectionOptions = {
+      suppressMarkers: true,
+      polylineOptions: { strokeColor: '#dc3545' },
+    };
+
+    this.infoWindowOptions = {
+      maxWidth: 200,
+    };
+  }
 
   ngOnInit() {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -38,7 +65,19 @@ export class SchoolMapComponent implements OnInit {
 
     this.schoolSelected.subscribe((markerSchool) => {
       this.getMarkers(markerSchool);
+      this.getDirections(markerSchool);
     });
+
+    this.schoolsFiltered.subscribe((schoolList) => {
+      if (!this.schoolListEquals(this.schoolList, schoolList)) {
+        this.schoolList = schoolList;
+        this.getMarkers();
+      }
+    });
+  }
+
+  schoolListEquals(arr1: ISchoolData[], arr2: ISchoolData[]): boolean {
+    return JSON.stringify(arr1) === JSON.stringify(arr2);
   }
 
   getMarkers(markerSchool: ISchoolData | null = null) {
@@ -93,17 +132,24 @@ export class SchoolMapComponent implements OnInit {
     ];
   }
 
+  getDirections(schoolSelected: ISchoolData) {
+    const request: google.maps.DirectionsRequest = {
+      destination: {
+        lat: schoolSelected.latitude,
+        lng: schoolSelected.longitude,
+      },
+      origin: { lat: this.center.lat, lng: this.center.lng },
+      travelMode: google.maps.TravelMode.DRIVING,
+    };
+    this.directionsResults$ = this.mapDirectionsService
+      .route(request)
+      .pipe(map((response) => response.result));
+  }
+
   openInfo(marker: MapMarker, content: any) {
-    let schoolContent = this.schoolList.find((x) => x.code == content);
-    this.infoContent = schoolContent
-      ? schoolContent?.name +
-        '\n' +
-        'Address: ' +
-        schoolContent?.address +
-        '\n' +
-        'Phone: ' +
-        schoolContent?.phone
-      : content;
-    this.infoWindow.open(marker);
+    this.schoolMapSelected = this.schoolList.find((x) => x.code == content);
+    if (this.schoolMapSelected) {
+      this.infoWindow.open(marker);
+    }
   }
 }

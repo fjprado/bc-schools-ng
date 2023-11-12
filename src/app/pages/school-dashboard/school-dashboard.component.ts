@@ -11,7 +11,7 @@ const ELEMENT_DATA: ISchoolData[] = [
     gradeRange: 'K-7',
     phone: '604 588-8394',
     fax: '604 930-1783',
-    schoolTypeId: 1,
+    schoolTypeId: 2,
     schoolTypeDesc: 'Standard School',
     schoolCategoryId: 2,
     schoolCategoryDesc: 'Public School',
