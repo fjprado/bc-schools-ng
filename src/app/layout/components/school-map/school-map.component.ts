@@ -27,6 +27,7 @@ export class SchoolMapComponent implements OnInit {
   @Input() schoolsFiltered: Subject<ISchoolData[]> = new Subject<
     ISchoolData[]
   >();
+  @Input() rowSelected: ISchoolData | null | undefined;
   loading: boolean = true;
   zoom = 13;
   center!: google.maps.LatLngLiteral;
@@ -60,7 +61,8 @@ export class SchoolMapComponent implements OnInit {
         lng: position.coords.longitude,
       };
       this.loading = false;
-      this.getMarkers();
+      this.getMarkers(this.rowSelected);
+      if (this.rowSelected) this.getDirections(this.rowSelected);
     });
 
     this.schoolSelected.subscribe((markerSchool) => {

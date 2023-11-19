@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { IDropdownItem } from '../dropdown/dropdown.component';
 import { ISchoolData } from 'src/app/models/school-data.model';
 import { Subject } from 'rxjs';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-table-content',
@@ -17,11 +18,21 @@ export class TableContentComponent implements OnInit {
   schoolCategoryList: IDropdownItem[] = [];
   range: number = 60;
   mapView: boolean = false;
-  itemsPerPage: number = 10; // Number of items to display per page
+  itemsPerPage: number = 6; // Number of items to display per page
   currentPage: number = 1; // Current page
-  schoolSelected: Subject<ISchoolData> = new Subject();
+  schoolSelected: Subject<ISchoolData | null> = new Subject();
   rowSelected: ISchoolData | null = null;
   schoolsFiltered: Subject<ISchoolData[]> = new Subject();
+
+  isMobile: boolean;
+
+  constructor(private breakpointObserver: BreakpointObserver) {
+    this.isMobile = this.breakpointObserver.isMatched(Breakpoints.Handset);
+
+    this.breakpointObserver.observe(Breakpoints.Handset).subscribe((result) => {
+      this.isMobile = result.matches;
+    });
+  }
 
   ngOnInit(): void {
     this.tableDataSource = this.dataSource;
@@ -110,6 +121,25 @@ export class TableContentComponent implements OnInit {
         x.travelDistance <= range
     );
 
+    this.schoolsFiltered.next(this.visibleData);
+  }
+
+  nextPage() {
+    this.currentPage =
+      this.currentPage !== this.totalPages()
+        ? this.currentPage + 1
+        : this.currentPage;
+    this.schoolsFiltered.next(this.visibleData);
+  }
+
+  previousPage() {
+    this.currentPage =
+      this.currentPage !== 1 ? this.currentPage - 1 : this.currentPage;
+    this.schoolsFiltered.next(this.visibleData);
+  }
+
+  setPage(page: number) {
+    this.currentPage = page;
     this.schoolsFiltered.next(this.visibleData);
   }
 }

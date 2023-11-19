@@ -5,13 +5,14 @@
     [schoolCategories]="schoolCategoryList"
     [schoolTypes]="schoolTypeList"
     [range]="range"
+    [isMobile]="isMobile"
     (onChangeView)="onChangeView()"
     (onFilterSchools)="onFilterSchools($event)"
   >
   </app-table-filter>
 </div>
 <div class="row gap-3">
-  <div class="card col">
+  <div *ngIf="!(mapView && isMobile)" class="card col-md col-sm-12">
     <div class="card-body">
       <table class="table table-bordered">
         <thead>
@@ -20,11 +21,11 @@
               <span class="content-up">School Name</span> <br />
               <span class="content-down">Address</span>
             </th>
-            <th *ngIf="!mapView">City</th>
-            <th *ngIf="!mapView">Grade Range</th>
-            <th *ngIf="!mapView">Contact</th>
-            <th *ngIf="mapView">More Info</th>
-            <th *ngIf="!mapView">School Details</th>
+            <th *ngIf="!mapView && !isMobile">City</th>
+            <th *ngIf="!mapView && !isMobile">Grade Range</th>
+            <th *ngIf="!mapView && !isMobile">Contact</th>
+            <th *ngIf="mapView || isMobile">More Info</th>
+            <th *ngIf="!mapView && !isMobile">School Details</th>
             <th>Travel Distance</th>
           </tr>
         </thead>
@@ -40,18 +41,18 @@
               <span class="content-up">{{ data.name }}</span> <br />
               <span class="content-down">{{ data.address }}</span>
             </td>
-            <td *ngIf="!mapView">{{ data.city }}</td>
-            <td *ngIf="!mapView">{{ data.gradeRange }}</td>
-            <td class="reduced-content" *ngIf="!mapView">
+            <td *ngIf="!mapView && !isMobile">{{ data.city }}</td>
+            <td *ngIf="!mapView && !isMobile">{{ data.gradeRange }}</td>
+            <td class="reduced-content" *ngIf="!mapView && !isMobile">
               <b>Phone:</b> {{ data.phone }} <br />
               <b>Fax:</b> {{ data.fax }}
             </td>
-            <td class="reduced-content" *ngIf="mapView">
+            <td class="reduced-content" *ngIf="mapView || isMobile">
               <b>City:</b> {{ data.city }} <br />
               <b>Phone:</b> {{ data.phone }} <br />
               <b>Fax:</b> {{ data.fax }}
             </td>
-            <td class="reduced-content" *ngIf="!mapView">
+            <td class="reduced-content" *ngIf="!mapView && !isMobile">
               {{ data.schoolTypeDesc }} <br />
               {{ data.schoolCategoryDesc }}
             </td>
@@ -63,9 +64,7 @@
         <ul class="pagination justify-content-center">
           <li
             class="page-item"
-            (click)="
-              currentPage = currentPage !== 1 ? currentPage - 1 : currentPage
-            "
+            (click)="previousPage()"
             [class.disabled]="currentPage === 1"
           >
             <a class="page-link">Previous</a>
@@ -75,14 +74,11 @@
             *ngFor="let page of getPages()"
             [class.active]="currentPage === page"
           >
-            <a class="page-link" (click)="currentPage = page">{{ page }}</a>
+            <a class="page-link" (click)="setPage(page)">{{ page }}</a>
           </li>
           <li
             class="page-item"
-            (click)="
-              currentPage =
-                currentPage !== totalPages() ? currentPage + 1 : currentPage
-            "
+            (click)="nextPage()"
             [class.disabled]="currentPage === totalPages()"
           >
             <a class="page-link">Next</a>
@@ -91,11 +87,40 @@
       </nav>
     </div>
   </div>
-  <div *ngIf="mapView" class="card col-7 d-flex justify-content-center">
+  <div
+    *ngIf="mapView"
+    class="card col-md-7 col-sm-12 d-flex justify-content-center"
+  >
     <app-school-map
       [schoolList]="visibleData"
       [schoolSelected]="schoolSelected"
       [schoolsFiltered]="schoolsFiltered"
+      [rowSelected]="rowSelected"
     ></app-school-map>
+    <nav *ngIf="isMobile" aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li
+          class="page-item"
+          (click)="previousPage()"
+          [class.disabled]="currentPage === 1"
+        >
+          <a class="page-link">Previous</a>
+        </li>
+        <li
+          class="page-item"
+          *ngFor="let page of getPages()"
+          [class.active]="currentPage === page"
+        >
+          <a class="page-link" (click)="setPage(page)">{{ page }}</a>
+        </li>
+        <li
+          class="page-item"
+          (click)="nextPage()"
+          [class.disabled]="currentPage === totalPages()"
+        >
+          <a class="page-link">Next</a>
+        </li>
+      </ul>
+    </nav>
   </div>
 </div>
