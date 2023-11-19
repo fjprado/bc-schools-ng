@@ -11,6 +11,7 @@ export class TableFilterComponent {
   @Input() schoolTypes!: IDropdownItem[];
   @Input() schoolCategories!: IDropdownItem[];
   @Input() range!: number;
+  @Input() isMobile!: boolean;
   mapView: boolean = false;
   @Output() onChangeView: EventEmitter<any> = new EventEmitter<any>();
   @Output() onFilterSchools: EventEmitter<any> = new EventEmitter<any>();

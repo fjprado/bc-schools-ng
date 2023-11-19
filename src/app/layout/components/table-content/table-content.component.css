@@ -54,3 +54,7 @@ th {
 .selected-row {
   border: 3px solid black !important;
 }
+
+.selected-row td {
+  background-color: #103c9b5b;
+}
