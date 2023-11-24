@@ -30,20 +30,20 @@
     </div>
     <div class="card col-md-9 col-sm-12 px-2">
       <div class="card-body align-items-center">
-        <form>
+        <form [formGroup]="form">
           <div class="row d-flex justify-content-around gap-1">
             <div class="col-md-8 col-sm-12">
               <input
-                type="text"
                 class="form-control"
-                id="address"
+                list="datalistOptions"
                 placeholder="Type an address here..."
                 aria-describedby="addressHelp"
-                [formControl]="addressControl"
+                formControlName="address"
+                autocomplete="off"
               />
               <datalist id="datalistOptions">
                 <option
-                  *ngFor="let item of this.listaAddress"
+                  *ngFor="let item of addressList"
                   [value]="item"
                 ></option>
               </datalist>
@@ -55,7 +55,7 @@
               <button
                 type="submit"
                 class="btn btn-primary"
-                (click)="searchAddress()"
+                (click)="searchSchools()"
               >
                 Search Schools
               </button>

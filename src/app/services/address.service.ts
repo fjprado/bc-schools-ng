@@ -7,6 +7,7 @@ import { ICoordinate } from '../models/coordinate.model';
 @Injectable({ providedIn: 'root' })
 export class AddressService {
   addressApiURL: string = `${environment.apiUrl}/Address`;
+
   constructor(private httpClient: HttpClient) {}
 
   getSuggestedAddressList(typedAddress: string): Observable<Array<string>> {
