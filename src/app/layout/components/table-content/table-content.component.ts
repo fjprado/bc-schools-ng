@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { IDropdownItem } from '../dropdown/dropdown.component';
 import { ISchoolData } from 'src/app/models/school-data.model';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { SchoolService } from 'src/app/services/school.service';
 
 @Component({
   selector: 'app-table-content',
@@ -11,11 +12,10 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 })
 export class TableContentComponent implements OnInit {
   @Input() dataSource: ISchoolData[] = [];
-  tableDataSource: ISchoolData[] = [];
+  @Input() cityList!: IDropdownItem[];
+  @Input() schoolTypeList!: IDropdownItem[];
+  @Input() schoolCategoryList!: IDropdownItem[];
   items: IDropdownItem[] = [];
-  cityList: IDropdownItem[] = [];
-  schoolTypeList: IDropdownItem[] = [];
-  schoolCategoryList: IDropdownItem[] = [];
   range: number = 60;
   mapView: boolean = false;
   itemsPerPage: number = 6; // Number of items to display per page
@@ -23,64 +23,43 @@ export class TableContentComponent implements OnInit {
   schoolSelected: Subject<ISchoolData | null> = new Subject();
   rowSelected: ISchoolData | null = null;
   schoolsFiltered: Subject<ISchoolData[]> = new Subject();
+  currentPosition!: google.maps.LatLngLiteral;
+  @Output() onFilterData: EventEmitter<any> = new EventEmitter<any>();
+
+  startIndex: number = 0;
+  endIndex: number = 0;
 
   isMobile: boolean;
 
-  constructor(private breakpointObserver: BreakpointObserver) {
+  private addressCoordinateSub: Subscription;
+
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private schoolService: SchoolService
+  ) {
     this.isMobile = this.breakpointObserver.isMatched(Breakpoints.Handset);
 
     this.breakpointObserver.observe(Breakpoints.Handset).subscribe((result) => {
       this.isMobile = result.matches;
     });
+
+    this.addressCoordinateSub =
+      this.schoolService.getAddressObservable$.subscribe((coordinate) => {
+        this.currentPosition = {
+          lat: coordinate.latitude,
+          lng: coordinate.longitude,
+        };
+      });
   }
 
-  ngOnInit(): void {
-    this.tableDataSource = this.dataSource;
-    // get values for dropdowns
-    const mapCity = new Map(
-      this.dataSource
-        .flatMap((x) => {
-          return {
-            id: x.city,
-            value: x.city,
-            selected: false,
-          };
-        })
-        .map((pos) => [pos.id, pos])
-    );
-    this.cityList = [...mapCity.values()];
-
-    const mapSchoolType = new Map(
-      this.dataSource
-        .flatMap((x) => {
-          return {
-            id: x.schoolTypeId,
-            value: x.schoolTypeDesc,
-            selected: false,
-          };
-        })
-        .map((pos) => [pos.id, pos])
-    );
-    this.schoolTypeList = [...mapSchoolType.values()];
-
-    const mapSchoolCategory = new Map(
-      this.dataSource
-        .flatMap((x) => {
-          return {
-            id: x.schoolCategoryId,
-            value: x.schoolCategoryDesc,
-            selected: false,
-          };
-        })
-        .map((pos) => [pos.id, pos])
-    );
-    this.schoolCategoryList = [...mapSchoolCategory.values()];
-  }
+  ngOnInit(): void {}
 
   get visibleData(): any[] {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
-    return this.tableDataSource.slice(startIndex, endIndex);
+    this.startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    this.endIndex = this.startIndex + this.itemsPerPage;
+    var schools = this.dataSource.slice(this.startIndex, this.endIndex);
+    this.schoolsFiltered.next(schools);
+    return schools;
   }
 
   setViewSchool(item: ISchoolData) {
@@ -90,13 +69,22 @@ export class TableContentComponent implements OnInit {
 
   getPages(): number[] {
     const totalPages = this.totalPages();
-    return Array(totalPages)
-      .fill(0)
-      .map((x, i) => i + 1);
+    const pagination = [];
+    const visiblePages = 5;
+    const offset = Math.max(
+      Math.min(this.currentPage - 2, totalPages - visiblePages + 1),
+      1
+    );
+
+    for (let i = 0; i < visiblePages && offset + i <= totalPages; i++) {
+      pagination.push(offset + i);
+    }
+
+    return pagination;
   }
 
   totalPages(): number {
-    return Math.ceil(this.tableDataSource.length / this.itemsPerPage);
+    return Math.ceil(this.dataSource.length / this.itemsPerPage);
   }
 
   onChangeView() {
@@ -105,23 +93,7 @@ export class TableContentComponent implements OnInit {
 
   onFilterSchools(range: number) {
     this.currentPage = 1;
-    let cities = this.cityList.filter((x) => x.selected).map((x) => x.value);
-    let schoolCategoryIds = this.schoolCategoryList
-      .filter((x) => x.selected)
-      .map((x) => x.id);
-    let schoolTypeIds = this.schoolTypeList
-      .filter((x) => x.selected)
-      .map((x) => x.id);
-    this.tableDataSource = this.dataSource.filter(
-      (x) =>
-        (cities.length == 0 || cities.includes(x.city)) &&
-        (schoolCategoryIds.length == 0 ||
-          schoolCategoryIds.includes(x.schoolCategoryId)) &&
-        (schoolTypeIds.length == 0 || schoolTypeIds.includes(x.schoolTypeId)) &&
-        x.travelDistance <= range
-    );
-
-    this.schoolsFiltered.next(this.visibleData);
+    this.onFilterData.emit(range);
   }
 
   nextPage() {
@@ -129,17 +101,18 @@ export class TableContentComponent implements OnInit {
       this.currentPage !== this.totalPages()
         ? this.currentPage + 1
         : this.currentPage;
-    this.schoolsFiltered.next(this.visibleData);
   }
 
   previousPage() {
     this.currentPage =
       this.currentPage !== 1 ? this.currentPage - 1 : this.currentPage;
-    this.schoolsFiltered.next(this.visibleData);
   }
 
   setPage(page: number) {
     this.currentPage = page;
-    this.schoolsFiltered.next(this.visibleData);
+  }
+
+  ngOnDestroy() {
+    this.addressCoordinateSub.unsubscribe();
   }
 }

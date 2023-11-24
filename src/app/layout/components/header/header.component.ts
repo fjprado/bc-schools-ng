@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { ICoordinate } from 'src/app/models/coordinate.model';
 import { AddressService } from 'src/app/services/address.service';
+import { SchoolService } from 'src/app/services/school.service';
 
 @Component({
   selector: 'app-header',
@@ -14,11 +15,11 @@ export class HeaderComponent {
   public form!: FormGroup;
   address: string = '';
   addressList: string[] = [];
-  addressCoordinate: ICoordinate | undefined;
 
   constructor(
     private fb: FormBuilder,
-    private addressService: AddressService
+    private addressService: AddressService,
+    private schoolService: SchoolService
   ) {}
 
   ngOnInit(): void {
@@ -47,7 +48,7 @@ export class HeaderComponent {
     this.addressService
       .getAddressCoordinate(this.address)
       .subscribe((result) => {
-        this.addressCoordinate = result;
+        this.schoolService.getSchools(result);
       });
   }
 }

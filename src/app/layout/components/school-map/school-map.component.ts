@@ -11,8 +11,9 @@ import {
   MapInfoWindow,
   MapMarker,
 } from '@angular/google-maps';
-import { Observable, Subject, map } from 'rxjs';
+import { Observable, Subject, Subscription, map } from 'rxjs';
 import { ISchoolData } from 'src/app/models/school-data.model';
+import { SchoolService } from 'src/app/services/school.service';
 
 @Component({
   selector: 'app-school-map',
@@ -28,9 +29,9 @@ export class SchoolMapComponent implements OnInit {
     ISchoolData[]
   >();
   @Input() rowSelected: ISchoolData | null | undefined;
+  @Input() currentPosition!: google.maps.LatLngLiteral;
   loading: boolean = true;
   zoom = 13;
-  center!: google.maps.LatLngLiteral;
   options: google.maps.MapOptions = {
     mapTypeId: 'roadmap',
     maxZoom: 20,
@@ -56,9 +57,13 @@ export class SchoolMapComponent implements OnInit {
 
   ngOnInit() {
     navigator.geolocation.getCurrentPosition((position) => {
-      this.center = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
+      this.currentPosition = {
+        lat: this.currentPosition
+          ? this.currentPosition.lat
+          : position.coords.latitude,
+        lng: this.currentPosition
+          ? this.currentPosition.lng
+          : position.coords.longitude,
       };
       this.loading = false;
       this.getMarkers(this.rowSelected);
@@ -92,8 +97,8 @@ export class SchoolMapComponent implements OnInit {
 
     let currentLocationMarker = {
       position: {
-        lat: this.center.lat,
-        lng: this.center.lng,
+        lat: this.currentPosition.lat,
+        lng: this.currentPosition.lng,
       },
       info: 'current_location',
       options: {
@@ -140,7 +145,10 @@ export class SchoolMapComponent implements OnInit {
         lat: schoolSelected.latitude,
         lng: schoolSelected.longitude,
       },
-      origin: { lat: this.center.lat, lng: this.center.lng },
+      origin: {
+        lat: this.currentPosition.lat,
+        lng: this.currentPosition.lng,
+      },
       travelMode: google.maps.TravelMode.DRIVING,
     };
     this.directionsResults$ = this.mapDirectionsService
