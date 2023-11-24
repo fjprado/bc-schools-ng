@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { ICoordinate } from 'src/app/models/coordinate.model';
 import { AddressService } from 'src/app/services/address.service';
@@ -11,14 +11,22 @@ import { AddressService } from 'src/app/services/address.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class HeaderComponent {
-  addressControl = new FormControl();
-  listaAddress: string[] = [];
+  public form!: FormGroup;
+  address: string = '';
+  addressList: string[] = [];
   addressCoordinate: ICoordinate | undefined;
 
-  constructor(private addressService: AddressService) {}
+  constructor(
+    private fb: FormBuilder,
+    private addressService: AddressService
+  ) {}
 
   ngOnInit(): void {
-    this.addressControl.valueChanges
+    this.form = this.fb.group({
+      address: [this.address, [Validators.required]],
+    });
+
+    this.form.controls['address'].valueChanges
       .pipe(
         map((value) => value.trim()),
         filter((value) => value.length > 4),
@@ -29,14 +37,15 @@ export class HeaderComponent {
         this.addressService
           .getSuggestedAddressList(value)
           .subscribe((result) => {
-            this.listaAddress = result;
+            this.address = value;
+            this.addressList = result;
           });
       });
   }
 
-  searchAddress() {
+  searchSchools() {
     this.addressService
-      .getAddressCoordinate(this.addressControl.value)
+      .getAddressCoordinate(this.address)
       .subscribe((result) => {
         this.addressCoordinate = result;
       });

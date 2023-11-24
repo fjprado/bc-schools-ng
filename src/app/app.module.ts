@@ -14,6 +14,7 @@ import { TableFilterComponent } from './layout/components/table-filter/table-fil
 import { TableContentComponent } from './layout/components/table-content/table-content.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { SchoolMapComponent } from './layout/components/school-map/school-map.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { SchoolMapComponent } from './layout/components/school-map/school-map.co
     ReactiveFormsModule,
     FormsModule,
     GoogleMapsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
