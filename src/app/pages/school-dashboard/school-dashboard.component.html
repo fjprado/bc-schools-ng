@@ -1,3 +1,9 @@
 <div class="container school-dashboard flex-column">
-  <app-table-content [dataSource]="dataSource"></app-table-content>
+  <app-table-content
+    [dataSource]="dataSource"
+    [cityList]="cityList"
+    [schoolCategoryList]="schoolCategoryList"
+    [schoolTypeList]="schoolTypeList"
+    (onFilterData)="onFilterData($event)"
+  ></app-table-content>
 </div>

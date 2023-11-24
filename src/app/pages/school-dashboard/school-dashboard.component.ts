@@ -1,331 +1,8 @@
 import { Component, ViewEncapsulation } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { IDropdownItem } from 'src/app/layout/components/dropdown/dropdown.component';
 import { ISchoolData } from 'src/app/models/school-data.model';
-
-const ELEMENT_DATA: ISchoolData[] = [
-  {
-    code: '3636183',
-    name: 'Forsyth Road Elementary',
-    address: '10730 139 St',
-    city: 'Surrey',
-    postalCode: 'V3T 4L9',
-    gradeRange: 'K-7',
-    phone: '604 588-8394',
-    fax: '604 930-1783',
-    schoolTypeId: 2,
-    schoolTypeDesc: 'Standard School',
-    schoolCategoryId: 2,
-    schoolCategoryDesc: 'Public School',
-    travelDistance: 2.477,
-    latitude: 49.1976293,
-    longitude: -122.836706,
-  },
-  {
-    code: '3625114',
-    name: 'Forsyth Road StrongStart Centre',
-    address: '10730 139 St',
-    city: 'Surrey',
-    postalCode: 'V3T 4L9',
-    gradeRange: 'Pre-K',
-    phone: '604 588-8394',
-    fax: null,
-    schoolTypeId: 2,
-    schoolTypeDesc: 'Early Learning Program',
-    schoolCategoryId: 3,
-    schoolCategoryDesc: 'StrongStart BC',
-    travelDistance: 2.477,
-    latitude: 49.1976293,
-    longitude: -122.836706,
-  },
-  {
-    code: '3636107',
-    name: 'Betty Huff Elementary',
-    address: '13055 Huntley Ave',
-    city: 'Surrey',
-    postalCode: 'V3V 1V1',
-    gradeRange: 'K-7',
-    phone: '604 585-3104',
-    fax: '604 585-1524',
-    schoolTypeId: 1,
-    schoolTypeDesc: 'Standard School',
-    schoolCategoryId: 2,
-    schoolCategoryDesc: 'Public School',
-    travelDistance: 2.492,
-    latitude: 49.1724628,
-    longitude: -122.8604038,
-  },
-  {
-    code: '3625110',
-    name: 'Betty Huff StrongStart Centre',
-    address: '13055 Huntley Ave',
-    city: 'Surrey',
-    postalCode: 'V3V 1V1',
-    gradeRange: 'Pre-K',
-    phone: '604 585-3104',
-    fax: '604 585-1524',
-    schoolTypeId: 2,
-    schoolTypeDesc: 'Early Learning Program',
-    schoolCategoryId: 3,
-    schoolCategoryDesc: 'StrongStart BC',
-    travelDistance: 2.492,
-    latitude: 49.1724628,
-    longitude: -122.8604038,
-  },
-  {
-    code: '3625110',
-    name: 'Betty Huff StrongStart Centre',
-    address: '13055 Huntley Ave',
-    city: 'Surrey',
-    postalCode: 'V3V 1V1',
-    gradeRange: 'Pre-K',
-    phone: '604 585-3104',
-    fax: '604 585-1524',
-    schoolTypeId: 2,
-    schoolTypeDesc: 'Early Learning Program',
-    schoolCategoryId: 3,
-    schoolCategoryDesc: 'StrongStart BC',
-    travelDistance: 2.492,
-    latitude: 49.1724628,
-    longitude: -122.8604038,
-  },
-  {
-    code: '3625110',
-    name: 'Betty Huff StrongStart Centre',
-    address: '13055 Huntley Ave',
-    city: 'Surrey',
-    postalCode: 'V3V 1V1',
-    gradeRange: 'Pre-K',
-    phone: '604 585-3104',
-    fax: '604 585-1524',
-    schoolTypeId: 2,
-    schoolTypeDesc: 'Early Learning Program',
-    schoolCategoryId: 3,
-    schoolCategoryDesc: 'StrongStart BC',
-    travelDistance: 2.492,
-    latitude: 49.1724628,
-    longitude: -122.8604038,
-  },
-  {
-    code: '3625110',
-    name: 'Betty Huff StrongStart Centre',
-    address: '13055 Huntley Ave',
-    city: 'Surrey',
-    postalCode: 'V3V 1V1',
-    gradeRange: 'Pre-K',
-    phone: '604 585-3104',
-    fax: '604 585-1524',
-    schoolTypeId: 2,
-    schoolTypeDesc: 'Early Learning Program',
-    schoolCategoryId: 3,
-    schoolCategoryDesc: 'StrongStart BC',
-    travelDistance: 2.492,
-    latitude: 49.1724628,
-    longitude: -122.8604038,
-  },
-  {
-    code: '3625110',
-    name: 'Betty Huff StrongStart Centre',
-    address: '13055 Huntley Ave',
-    city: 'Surrey',
-    postalCode: 'V3V 1V1',
-    gradeRange: 'Pre-K',
-    phone: '604 585-3104',
-    fax: '604 585-1524',
-    schoolTypeId: 2,
-    schoolTypeDesc: 'Early Learning Program',
-    schoolCategoryId: 3,
-    schoolCategoryDesc: 'StrongStart BC',
-    travelDistance: 2.492,
-    latitude: 49.1724628,
-    longitude: -122.8604038,
-  },
-  {
-    code: '3625110',
-    name: 'Betty Huff StrongStart Centre',
-    address: '13055 Huntley Ave',
-    city: 'Surrey',
-    postalCode: 'V3V 1V1',
-    gradeRange: 'Pre-K',
-    phone: '604 585-3104',
-    fax: '604 585-1524',
-    schoolTypeId: 2,
-    schoolTypeDesc: 'Early Learning Program',
-    schoolCategoryId: 3,
-    schoolCategoryDesc: 'StrongStart BC',
-    travelDistance: 2.492,
-    latitude: 49.1724628,
-    longitude: -122.8604038,
-  },
-  {
-    code: '3625110',
-    name: 'Betty Huff StrongStart Centre',
-    address: '13055 Huntley Ave',
-    city: 'Surrey',
-    postalCode: 'V3V 1V1',
-    gradeRange: 'Pre-K',
-    phone: '604 585-3104',
-    fax: '604 585-1524',
-    schoolTypeId: 2,
-    schoolTypeDesc: 'Early Learning Program',
-    schoolCategoryId: 3,
-    schoolCategoryDesc: 'StrongStart BC',
-    travelDistance: 2.492,
-    latitude: 49.1724628,
-    longitude: -122.8604038,
-  },
-  {
-    code: '3625110',
-    name: 'Betty Huff StrongStart Centre',
-    address: '13055 Huntley Ave',
-    city: 'Surrey',
-    postalCode: 'V3V 1V1',
-    gradeRange: 'Pre-K',
-    phone: '604 585-3104',
-    fax: '604 585-1524',
-    schoolTypeId: 2,
-    schoolTypeDesc: 'Early Learning Program',
-    schoolCategoryId: 3,
-    schoolCategoryDesc: 'StrongStart BC',
-    travelDistance: 2.492,
-    latitude: 49.1724628,
-    longitude: -122.8604038,
-  },
-  {
-    code: '3625110',
-    name: 'Betty Huff StrongStart Centre',
-    address: '13055 Huntley Ave',
-    city: 'Surrey',
-    postalCode: 'V3V 1V1',
-    gradeRange: 'Pre-K',
-    phone: '604 585-3104',
-    fax: '604 585-1524',
-    schoolTypeId: 2,
-    schoolTypeDesc: 'Early Learning Program',
-    schoolCategoryId: 3,
-    schoolCategoryDesc: 'StrongStart BC',
-    travelDistance: 2.492,
-    latitude: 49.1724628,
-    longitude: -122.8604038,
-  },
-  {
-    code: '3625110',
-    name: 'Betty Huff StrongStart Centre',
-    address: '13055 Huntley Ave',
-    city: 'Surrey',
-    postalCode: 'V3V 1V1',
-    gradeRange: 'Pre-K',
-    phone: '604 585-3104',
-    fax: '604 585-1524',
-    schoolTypeId: 2,
-    schoolTypeDesc: 'Early Learning Program',
-    schoolCategoryId: 3,
-    schoolCategoryDesc: 'StrongStart BC',
-    travelDistance: 2.492,
-    latitude: 49.1724628,
-    longitude: -122.8604038,
-  },
-  {
-    code: '3625110',
-    name: 'Betty Huff StrongStart Centre',
-    address: '13055 Huntley Ave',
-    city: 'Surrey',
-    postalCode: 'V3V 1V1',
-    gradeRange: 'Pre-K',
-    phone: '604 585-3104',
-    fax: '604 585-1524',
-    schoolTypeId: 2,
-    schoolTypeDesc: 'Early Learning Program',
-    schoolCategoryId: 3,
-    schoolCategoryDesc: 'StrongStart BC',
-    travelDistance: 2.492,
-    latitude: 49.1724628,
-    longitude: -122.8604038,
-  },
-  {
-    code: '3625110',
-    name: 'Betty Huff StrongStart Centre',
-    address: '13055 Huntley Ave',
-    city: 'Surrey',
-    postalCode: 'V3V 1V1',
-    gradeRange: 'Pre-K',
-    phone: '604 585-3104',
-    fax: '604 585-1524',
-    schoolTypeId: 2,
-    schoolTypeDesc: 'Early Learning Program',
-    schoolCategoryId: 3,
-    schoolCategoryDesc: 'StrongStart BC',
-    travelDistance: 2.492,
-    latitude: 49.1724628,
-    longitude: -122.8604038,
-  },
-  {
-    code: '3625110',
-    name: 'Betty Huff StrongStart Centre',
-    address: '13055 Huntley Ave',
-    city: 'Surrey',
-    postalCode: 'V3V 1V1',
-    gradeRange: 'Pre-K',
-    phone: '604 585-3104',
-    fax: '604 585-1524',
-    schoolTypeId: 2,
-    schoolTypeDesc: 'Early Learning Program',
-    schoolCategoryId: 3,
-    schoolCategoryDesc: 'StrongStart BC',
-    travelDistance: 2.492,
-    latitude: 49.1724628,
-    longitude: -122.8604038,
-  },
-  {
-    code: '3625110',
-    name: 'Betty Huff StrongStart Centre',
-    address: '13055 Huntley Ave',
-    city: 'Surrey',
-    postalCode: 'V3V 1V1',
-    gradeRange: 'Pre-K',
-    phone: '604 585-3104',
-    fax: '604 585-1524',
-    schoolTypeId: 2,
-    schoolTypeDesc: 'Early Learning Program',
-    schoolCategoryId: 3,
-    schoolCategoryDesc: 'StrongStart BC',
-    travelDistance: 2.492,
-    latitude: 49.1724628,
-    longitude: -122.8604038,
-  },
-  {
-    code: '3625110',
-    name: 'Betty Huff StrongStart Centre',
-    address: '13055 Huntley Ave',
-    city: 'Surrey',
-    postalCode: 'V3V 1V1',
-    gradeRange: 'Pre-K',
-    phone: '604 585-3104',
-    fax: '604 585-1524',
-    schoolTypeId: 2,
-    schoolTypeDesc: 'Early Learning Program',
-    schoolCategoryId: 3,
-    schoolCategoryDesc: 'StrongStart BC',
-    travelDistance: 2.492,
-    latitude: 49.1724628,
-    longitude: -122.8604038,
-  },
-  {
-    code: '3625110',
-    name: 'Betty Huff StrongStart Centre',
-    address: '13055 Huntley Ave',
-    city: 'Surrey',
-    postalCode: 'V3V 1V1',
-    gradeRange: 'Pre-K',
-    phone: '604 585-3104',
-    fax: '604 585-1524',
-    schoolTypeId: 2,
-    schoolTypeDesc: 'Early Learning Program',
-    schoolCategoryId: 3,
-    schoolCategoryDesc: 'StrongStart BC',
-    travelDistance: 2.492,
-    latitude: 49.1724628,
-    longitude: -122.8604038,
-  },
-];
+import { SchoolService } from 'src/app/services/school.service';
 
 @Component({
   selector: 'app-school-dashboard',
@@ -334,6 +11,69 @@ const ELEMENT_DATA: ISchoolData[] = [
   encapsulation: ViewEncapsulation.None,
 })
 export class SchoolDashboardComponent {
+  private schoolListSub: Subscription;
   displayedColumns: string[] = ['profile', 'hrate', 'exclasses', 'status'];
-  dataSource = ELEMENT_DATA;
+  data: ISchoolData[] = [];
+  dataSource: ISchoolData[] = [];
+  cityList: IDropdownItem[] = [];
+  schoolTypeList: IDropdownItem[] = [];
+  schoolCategoryList: IDropdownItem[] = [];
+
+  constructor(private schoolService: SchoolService) {
+    this.schoolListSub = this.schoolService.getSchoolObservable$.subscribe(
+      (result) => {
+        this.data = result;
+        this.dataSource = result;
+
+        this.cityList = this.generateList(result, 'city', 'city');
+        this.schoolTypeList = this.generateList(
+          result,
+          'schoolTypeId',
+          'schoolTypeDesc'
+        );
+        this.schoolCategoryList = this.generateList(
+          result,
+          'schoolCategoryId',
+          'schoolCategoryDesc'
+        );
+      }
+    );
+  }
+
+  generateList(source: any[], idProp: string, valueProp: string): any[] {
+    const map = new Map(
+      source
+        .flatMap((x) => ({
+          id: x[idProp],
+          value: x[valueProp],
+          selected: false,
+        }))
+        .map((pos) => [pos.id, pos])
+    );
+
+    return [...map.values()];
+  }
+
+  onFilterData(range: number) {
+    let cities = this.cityList.filter((x) => x.selected).map((x) => x.value);
+    let schoolCategoryIds = this.schoolCategoryList
+      .filter((x) => x.selected)
+      .map((x) => x.id);
+    let schoolTypeIds = this.schoolTypeList
+      .filter((x) => x.selected)
+      .map((x) => x.id);
+
+    this.dataSource = this.data.filter(
+      (x) =>
+        (cities.length == 0 || cities.includes(x.city)) &&
+        (schoolCategoryIds.length == 0 ||
+          schoolCategoryIds.includes(x.schoolCategoryId)) &&
+        (schoolTypeIds.length == 0 || schoolTypeIds.includes(x.schoolTypeId)) &&
+        x.travelDistance <= range
+    );
+  }
+
+  ngOnDestroy() {
+    this.schoolListSub.unsubscribe();
+  }
 }
