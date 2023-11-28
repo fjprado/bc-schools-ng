@@ -1,19 +1,12 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  SimpleChanges,
-  ViewChild,
-} from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {
   GoogleMap,
   MapDirectionsService,
   MapInfoWindow,
   MapMarker,
 } from '@angular/google-maps';
-import { Observable, Subject, Subscription, map } from 'rxjs';
+import { Observable, Subject, map, of } from 'rxjs';
 import { ISchoolData } from 'src/app/models/school-data.model';
-import { SchoolService } from 'src/app/services/school.service';
 
 @Component({
   selector: 'app-school-map',
@@ -28,6 +21,7 @@ export class SchoolMapComponent implements OnInit {
   @Input() schoolsFiltered: Subject<ISchoolData[]> = new Subject<
     ISchoolData[]
   >();
+  @Input() pageSelected: Subject<void> = new Subject<void>();
   @Input() rowSelected: ISchoolData | null | undefined;
   @Input() currentPosition!: google.maps.LatLngLiteral;
   loading: boolean = true;
@@ -76,14 +70,23 @@ export class SchoolMapComponent implements OnInit {
     });
 
     this.schoolsFiltered.subscribe((schoolList) => {
-      if (!this.schoolListEquals(this.schoolList, schoolList)) {
+      if (
+        !this.schoolListEquals(
+          this.schoolList.map((x) => x.code).sort(),
+          schoolList.map((x) => x.code).sort()
+        )
+      ) {
         this.schoolList = schoolList;
         this.getMarkers();
       }
     });
+
+    this.pageSelected.subscribe(() => {
+      this.getDirections(null);
+    });
   }
 
-  schoolListEquals(arr1: ISchoolData[], arr2: ISchoolData[]): boolean {
+  schoolListEquals(arr1: string[], arr2: string[]): boolean {
     return JSON.stringify(arr1) === JSON.stringify(arr2);
   }
 
@@ -139,21 +142,25 @@ export class SchoolMapComponent implements OnInit {
     ];
   }
 
-  getDirections(schoolSelected: ISchoolData) {
-    const request: google.maps.DirectionsRequest = {
-      destination: {
-        lat: schoolSelected.latitude,
-        lng: schoolSelected.longitude,
-      },
-      origin: {
-        lat: this.currentPosition.lat,
-        lng: this.currentPosition.lng,
-      },
-      travelMode: google.maps.TravelMode.DRIVING,
-    };
-    this.directionsResults$ = this.mapDirectionsService
-      .route(request)
-      .pipe(map((response) => response.result));
+  getDirections(schoolSelected: ISchoolData | null) {
+    if (schoolSelected) {
+      const request: google.maps.DirectionsRequest = {
+        destination: {
+          lat: schoolSelected.latitude,
+          lng: schoolSelected.longitude,
+        },
+        origin: {
+          lat: this.currentPosition.lat,
+          lng: this.currentPosition.lng,
+        },
+        travelMode: google.maps.TravelMode.DRIVING,
+      };
+      this.directionsResults$ = this.mapDirectionsService
+        .route(request)
+        .pipe(map((response) => response.result));
+    } else {
+      this.directionsResults$ = of(undefined);
+    }
   }
 
   openInfo(marker: MapMarker, content: any) {

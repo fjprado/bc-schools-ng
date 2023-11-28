@@ -23,6 +23,7 @@ export class TableContentComponent implements OnInit {
   schoolSelected: Subject<ISchoolData | null> = new Subject();
   rowSelected: ISchoolData | null = null;
   schoolsFiltered: Subject<ISchoolData[]> = new Subject();
+  pageSelected: Subject<void> = new Subject();
   currentPosition!: google.maps.LatLngLiteral;
   @Output() onFilterData: EventEmitter<any> = new EventEmitter<any>();
 
@@ -101,15 +102,23 @@ export class TableContentComponent implements OnInit {
       this.currentPage !== this.totalPages()
         ? this.currentPage + 1
         : this.currentPage;
+    this.clearSelectedSchool();
   }
 
   previousPage() {
     this.currentPage =
       this.currentPage !== 1 ? this.currentPage - 1 : this.currentPage;
+    this.clearSelectedSchool();
   }
 
   setPage(page: number) {
     this.currentPage = page;
+    this.clearSelectedSchool();
+  }
+
+  clearSelectedSchool() {
+    this.pageSelected.next();
+    this.rowSelected = null;
   }
 
   ngOnDestroy() {

@@ -31,7 +31,7 @@
     <div class="card col-md-9 col-sm-12 px-2">
       <div class="card-body align-items-center">
         <form [formGroup]="form">
-          <div class="row d-flex justify-content-around gap-1">
+          <div class="row d-flex justify-content-around">
             <div class="col-md-8 col-sm-12">
               <input
                 class="form-control"
@@ -48,17 +48,34 @@
                 ></option>
               </datalist>
               <div id="addressHelp" class="form-text">
-                For example "1455 Quebec St, Vancouver"
+                For example "1455 Quebec St, Vancouver" or click on the compass
+                to use your current location
               </div>
             </div>
-            <div class="col-md-3 col-sm-12 d-flex flex-column">
-              <button
-                type="submit"
-                class="btn btn-primary"
-                (click)="searchSchools()"
-              >
-                Search Schools
-              </button>
+            <div class="col-md-4 col-sm-12 d-flex justify-content-between">
+              <div class="col-md-3 col-sm-3">
+                <button
+                  type="submit"
+                  class="btn btn-danger"
+                  style="line-height: 0.8"
+                  (click)="searchByUserLocation()"
+                >
+                  <span
+                    class="material-symbols-outlined d-flex justify-content-center"
+                  >
+                    explore
+                  </span>
+                </button>
+              </div>
+              <div class="col-md-9 col-sm-9 d-flex flex-column">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  (click)="searchSchools()"
+                >
+                  Search Schools
+                </button>
+              </div>
             </div>
           </div>
         </form>

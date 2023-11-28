@@ -51,4 +51,14 @@ export class HeaderComponent {
         this.schoolService.getSchools(result);
       });
   }
+
+  searchByUserLocation() {
+    this.form.controls['address'].setValue('Your current location');
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.schoolService.getSchools({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      });
+    });
+  }
 }
