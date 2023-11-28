@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://localhost:7200/api',
+  apiUrl: 'https://van-schools-api.azurewebsites.net/api',
 };
