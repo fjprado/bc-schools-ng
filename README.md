@@ -1,27 +1,82 @@
-# BcSchoolsNg
+# BC Schools
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.6.
+## Overview
 
-## Development server
+The BC Schools is a web application that allows users to search for schools in their neighborhood or near a desired location. The application provides a list of schools along with corresponding maps and directions to each school.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Features
 
-## Code scaffolding
+- **Search Schools:** Easily search for schools based on your location or near a desired location.
+- **List View:** View a comprehensive list of schools that match the search criteria.
+- **Filters:** Use filters to get schools that match your preference.
+- **Map View:** Visualize the location of each school on an interactive map.
+- **Directions:** Get directions from your current location to a selected school.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Getting Started
 
-## Build
+### Prerequisites
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Make sure you have the following installed on your machine:
 
-## Running unit tests
+- Node.js
+- npm (Node Package Manager)
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Installation
 
-## Running end-to-end tests
+1. Clone the repository to your local machine:
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+    ```bash
+    git clone https://github.com/fjprado/bc-schools-ng.git
+    ```
 
-## Further help
+2. Navigate to the project directory:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+    ```bash
+    cd school-finder
+    ```
+
+3. Install dependencies:
+
+    ```bash
+    npm install
+    ```
+
+### Usage
+
+1. Start the application:
+
+    ```bash
+    npm start
+    ```
+
+2. Open your web browser and go to [http://localhost:4200](http://localhost:4200).
+
+3. Use the search functionality to find schools in your neighborhood or near a desired location.
+
+4. Explore the list of schools, view maps, and get directions.
+
+## Technologies Used
+
+- Angular 16: Frontend framework
+- @angular/google-maps: Mapping and location services
+- .Net Core: Backend server - [API Repository](https://github.com/fjprado/bc-schools-api)
+- SQL Server: Database
+
+## Contributing
+
+If you'd like to contribute to the project, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them.
+4. Push to your fork and submit a pull request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+All school data was obtained through the BC Educational website - [BC K-12 School and District Contact Information](http://www.bced.gov.bc.ca/apps/imcl/imclWeb/Home.do).
+
+Feel free to contact us if you have any questions or issues!
