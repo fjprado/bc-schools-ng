@@ -4,6 +4,8 @@
 
 The BC Schools is a web application that allows users to search for schools in their neighborhood or near a desired location. The application provides a list of schools along with corresponding maps and directions to each school.
 
+You can also access a live demo [here](https://gray-hill-081df9310.4.azurestaticapps.net/)
+
 ## Features
 
 - **Search Schools:** Easily search for schools based on your location or near a desired location.
