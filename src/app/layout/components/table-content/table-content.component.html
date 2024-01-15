@@ -13,7 +13,7 @@
 </div>
 <div class="row gap-3">
   <div *ngIf="!(mapView && isMobile)" class="card col-md col-sm-12">
-    <div class="card-body">
+    <div class="card-body">       
       <table class="table table-bordered">
         <thead>
           <tr>
@@ -28,8 +28,23 @@
             <th *ngIf="!mapView && !isMobile">School Details</th>
             <th>Travel Distance</th>
           </tr>
-        </thead>
+        </thead>              
         <tbody>
+          <tr *ngIf="isLoading">
+            <td colspan="100%">
+              <div class="loading-container" >
+                <div class="spinner-grow text-light loading-box" role="status">
+                  <img
+                    src="/assets/images/favicon.ico"
+                    style="height: 3rem; width: 3rem; align-self: center"
+                    alt="logo"
+                  />
+                  <span class="sr-only loading-text">Loading...</span>                
+                </div>
+                <span class="sr-only loading-text">If it's taking too long, try searching again</span>              
+              </div>
+            </td>            
+          </tr>
           <tr
             *ngFor="let data of visibleData"
             (click)="setViewSchool(data)"

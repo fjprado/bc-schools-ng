@@ -9,17 +9,22 @@ import { ISchoolData } from '../models/school-data.model';
 export class SchoolService {
   private getSchoolSubject = new Subject<Array<ISchoolData>>();
   private getAddressSubject = new Subject<ICoordinate>();
+  private getLoadingSubject = new Subject<boolean>();
   addressApiURL: string = `${environment.apiUrl}/School`;
 
   getSchoolObservable$ = this.getSchoolSubject.asObservable();
   getAddressObservable$ = this.getAddressSubject.asObservable();
+  getLoadingObservable$ = this.getLoadingSubject.asObservable();
 
   constructor(private httpClient: HttpClient) {}
 
   getSchools(coordinate: ICoordinate) {
+    this.getLoadingSubject.next(true);
     this.getAddressSubject.next(coordinate);
+    
     this.getSchoolsList(coordinate).subscribe((result) => {
       this.getSchoolSubject.next(result);
+      this.getLoadingSubject.next(false);
     });
   }
 
