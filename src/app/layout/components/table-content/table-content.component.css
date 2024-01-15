@@ -58,3 +58,21 @@ th {
 .selected-row td {
   background-color: #103c9b5b;
 }
+
+.loading-container {
+  height: 13rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.loading-box {
+  display: flex;
+  width: max-content;
+  flex-direction: column;
+}
+
+.loading-text {
+  color: #103b9b;
+}

@@ -15,6 +15,7 @@ export class TableContentComponent implements OnInit {
   @Input() cityList!: IDropdownItem[];
   @Input() schoolTypeList!: IDropdownItem[];
   @Input() schoolCategoryList!: IDropdownItem[];
+  isLoading: boolean = false;
   items: IDropdownItem[] = [];
   range: number = 60;
   mapView: boolean = false;
@@ -28,11 +29,12 @@ export class TableContentComponent implements OnInit {
   @Output() onFilterData: EventEmitter<any> = new EventEmitter<any>();
 
   startIndex: number = 0;
-  endIndex: number = 0;
+  endIndex: number = 0;  
 
   isMobile: boolean;
 
-  private addressCoordinateSub: Subscription;
+  private addressCoordinateSub: Subscription;  
+  private loadingSub: Subscription;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -50,7 +52,9 @@ export class TableContentComponent implements OnInit {
           lat: coordinate.latitude,
           lng: coordinate.longitude,
         };
-      });
+      });    
+
+      this.loadingSub = this.schoolService.getLoadingObservable$.subscribe(result => this.isLoading = result);
   }
 
   ngOnInit(): void {}
@@ -59,7 +63,7 @@ export class TableContentComponent implements OnInit {
     this.startIndex = (this.currentPage - 1) * this.itemsPerPage;
     this.endIndex = this.startIndex + this.itemsPerPage;
     var schools = this.dataSource.slice(this.startIndex, this.endIndex);
-    this.schoolsFiltered.next(schools);
+    this.schoolsFiltered.next(schools);    
     return schools;
   }
 
@@ -123,5 +127,6 @@ export class TableContentComponent implements OnInit {
 
   ngOnDestroy() {
     this.addressCoordinateSub.unsubscribe();
+    this.loadingSub.unsubscribe();
   }
 }
